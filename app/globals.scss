@@ -16,12 +16,29 @@
   }
 }
 
+* {
+  box-sizing: border-box;
+}
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: rgb(var(--background-start-rgb));
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Lato", sans-serif;
+  @apply text-neutral-800 dark:text-neutral-100
+}
+
+ul {
+  list-style: none;
+  @apply m-0 p-0
+}
+
+.center {
+  @apply m-auto text-center;
 }

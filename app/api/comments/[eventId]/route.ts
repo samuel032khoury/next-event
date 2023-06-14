@@ -1,6 +1,9 @@
 import { commentValidator } from "@/lib/validations/comment";
 import { nanoid } from "nanoid";
-import {setFirestoreDoc} from "@/lib/firestore";
+import {
+  getFirestoreCollectionData,
+  setFirestoreDoc,
+} from "@/lib/firestore";
 
 interface EventCommentProp {
   params: {
@@ -9,9 +12,14 @@ interface EventCommentProp {
 }
 
 export async function GET(
+  _: Request,
+  { params: { eventId } }: EventCommentProp
 ) {
-
-  return new Response("OK");
+  await new Promise((resolve) => setTimeout(resolve, 1500));
+  const eventComments = await getFirestoreCollectionData<EventComment>(
+    `events/${eventId}/comments`
+  );
+  return new Response(JSON.stringify(eventComments), { status: 200 });
 }
 
 export async function POST(
@@ -31,7 +39,11 @@ export async function POST(
     text,
   };
 
-  await setFirestoreDoc(`events/${eventId}/comments`, comment.id, comment)
+  try {
+    await setFirestoreDoc(`events/${eventId}/comments`, comment.id, comment);
+  } catch (error) {
+    return new Response("Internal Server Error", { status: 500 });
+  }
 
   return new Response(JSON.stringify(comment), {
     status: 201,

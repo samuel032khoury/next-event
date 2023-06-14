@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  AreaHTMLAttributes,
-  FC,
-  useState,
-} from "react";
+import { AreaHTMLAttributes, FC, useState } from "react";
 import { z } from "zod";
 import { commentValidator } from "@/lib/validations/comment";
 import { useForm } from "react-hook-form";
@@ -59,7 +55,13 @@ const NewCommentForm: FC<NewCommentFormProps> = ({
   };
 
   return (
-    <div className={cn("max-w-3xl lg:w-full w-9/12", className)}>
+    <div
+      className={cn(
+        "p-8 w-9/12 max-w-3xl lg:w-full rounded-xl bg-sky-100 dark:bg-slate-800 " +
+        "shadow-md shadow-gray-600 dark:shadow-gray-950",
+        className
+      )}
+    >
       <form onSubmit={handleSubmit(submitAction)}>
         <div className={"flex flex-col gap-2 leading-6"}>
           <div className={"mt-2 flex flex-row gap-1"}>
@@ -72,6 +74,7 @@ const NewCommentForm: FC<NewCommentFormProps> = ({
                 register={register}
                 fieldName={"name"}
                 placeholder={"John Doe"}
+                className={"bg-sky-50 dark:bg-slate-700 text-white"}
                 onChange={clearErrorPrompt}
               />
             </div>
@@ -84,13 +87,14 @@ const NewCommentForm: FC<NewCommentFormProps> = ({
                 register={register}
                 fieldName={"email"}
                 placeholder={"john@example.com"}
+                className={"bg-sky-50 dark:bg-slate-700 text-white"}
                 onChange={clearErrorPrompt}
               />
             </div>
           </div>
 
           <TextArea
-            className={"h-32 resize-none overflow-auto"}
+            className={"h-32 resize-none overflow-auto bg-sky-50 dark:bg-slate-700 text-white"}
             register={register}
             fieldName={"text"}
             placeholder={"Comment something sparkling..."}

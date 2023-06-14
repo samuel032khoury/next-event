@@ -1,14 +1,15 @@
-import { FC, LiHTMLAttributes } from "react";
+import React, { FC, LiHTMLAttributes, Suspense } from "react";
 import Image from "next/image";
 import { CalendarIcon, LucideIcon, MapPin } from "lucide-react";
 import NewCommentForm from "@/components/form/NewCommentForm";
-
+import CommentsList from "@/components/comments/CommentsList";
+import Spinner from "@/components/ui/Spinner";
 interface EventDetailsProps {
   event: UpcomingEvent;
 }
 
 const EventDetails: FC<EventDetailsProps> = ({ event }: EventDetailsProps) => {
-  const {title, location, date, image, description } = event;
+  const { title, location, date, image, description } = event;
   const dateLocale = new Date(date).toLocaleDateString("en-US", {
     day: "numeric",
     month: "long",
@@ -76,6 +77,11 @@ const EventDetails: FC<EventDetailsProps> = ({ event }: EventDetailsProps) => {
       </div>
       <div className={"mt-12 flex flex-1 justify-center"}>
         <NewCommentForm />
+      </div>
+      <div className="flex justify-center items-center h-auto py-12">
+        <Suspense fallback={<Spinner />}>
+          <CommentsList />
+        </Suspense>
       </div>
     </div>
   );

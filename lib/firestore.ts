@@ -1,9 +1,9 @@
 import { initializeApp } from "firebase/app";
 import {
   collection,
-  doc,
+  doc, DocumentData,
   getDocs,
-  getFirestore,
+  getFirestore, Query,
   query,
   setDoc,
 } from "@firebase/firestore";
@@ -24,11 +24,20 @@ initializeApp(firebaseConfig);
 
 export const db = getFirestore();
 
-export const getFirestoreCollectionKeys = async (collectionPath: string) => {
+export const getFirestoreCollectionKeys = async (
+  collectionPath: string
+): Promise<string[] | never> => {
   const collectionRef = collection(db, collectionPath);
   const queryResult = query(collectionRef);
   const querySnapshot = await getDocs(queryResult);
   return querySnapshot.docs.map((doc) => doc.id);
+};
+
+export const getFirestoreCollectionData = async <T extends DocumentData>(collectionPath: string):Promise<T[]> => {
+  const collectionRef = collection(db, collectionPath);
+  const queryResult = <Query<T>>query(collectionRef);
+  const querySnapshot = await getDocs(queryResult);
+  return querySnapshot.docs.map(snapshot => snapshot.data());
 };
 
 export const setFirestoreDoc = async <T extends {}>(
@@ -37,10 +46,5 @@ export const setFirestoreDoc = async <T extends {}>(
   data: T = {} as T
 ): Promise<void | never> => {
   const docRef = doc(db, collectionPath, key);
-  try {
-    await setDoc(docRef, data);
-  } catch (error) {
-    console.log((error as Error).message);
-    throw new Error("Internal Server Error");
-  }
+  await setDoc(docRef, data);
 };

@@ -10,7 +10,9 @@ import axios from "axios";
 import InputField from "@/components/ui/InputField";
 
 const SubscribeForm: FC = () => {
-  const [stateOK, setStateOK] = useState(false);
+  const [formState, setFormState] = useState<
+    "standby" | "loading" | "error" | "success"
+  >("standby");
   type FormData = z.infer<typeof emailValidator>;
   const {
     register,
@@ -25,11 +27,15 @@ const SubscribeForm: FC = () => {
 
   const subscribeNewsletter = async (email: string) => {
     try {
+      setFormState("loading");
       const validatedEmail = emailValidator.parse({ email });
       await axios.post("/api/newsletter", { email: validatedEmail });
-      setStateOK(true);
+      setFormState("success");
+      setTimeout(() => {
+        setFormState('standby');
+      }, 5000);
     } catch (error) {
-      setStateOK(false);
+      setFormState("error");
       setError("root", { message: "Something went wrong..." });
     } finally {
       resetField("email");
@@ -51,13 +57,18 @@ const SubscribeForm: FC = () => {
           className={"rounded-r-none"}
           placeholder={"john@example.com"}
           onChange={() => {
-            setStateOK(false);
+            setFormState("standby");
             clearErrors();
           }}
         />
-        <Button className={"px-4 rounded-l-none"}>Subscribe</Button>
+        <Button
+          className={"px-4 rounded-l-none"}
+          disabled={formState === "loading"}
+        >
+          Subscribe
+        </Button>
       </div>
-      {stateOK ? (
+      {formState === "success" ? (
         <p className={"mt-1 text-sm text-green-600 text-start pl-1"}>
           Successfully subscribed!
         </p>

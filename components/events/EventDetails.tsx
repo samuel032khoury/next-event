@@ -9,7 +9,7 @@ interface EventDetailsProps {
 }
 
 const EventDetails: FC<EventDetailsProps> = ({ event }: EventDetailsProps) => {
-  const { title, location, date, image, description } = event;
+  const { id: eid, title, location, date, image, description } = event;
   const dateLocale = new Date(date).toLocaleDateString("en-US", {
     day: "numeric",
     month: "long",
@@ -70,18 +70,22 @@ const EventDetails: FC<EventDetailsProps> = ({ event }: EventDetailsProps) => {
       </div>
       <div
         className={
-          "text-2xl text-slate-800 dark:text-white w-11/12 max-w-2xl m-auto mt-32"
+          "text-2xl text-slate-800 dark:text-white w-11/12 max-w-lg lg:max-w-2xl m-auto mt-32"
         }
       >
         {description}
       </div>
-      <div className={"mt-12 flex flex-1 justify-center"}>
-        <NewCommentForm />
+      <div className="flex gap-3 justify-center items-center pt-8">
+        <span className="text-lg font-semibold cursor-default">Comments</span>
+        <div className="w-full max-w-lg lg:max-w-3xl border-b border-black mr-2 pt-0.5"></div>
       </div>
-      <div className="flex justify-center items-center h-auto py-12">
+      <div className="flex justify-center items-center h-auto py-8">
         <Suspense fallback={<Spinner />}>
-          <CommentsList />
+          <CommentsList eid={eid} />
         </Suspense>
+      </div>
+      <div className={"mt-4 flex flex-1 justify-center"}>
+        <NewCommentForm />
       </div>
     </div>
   );

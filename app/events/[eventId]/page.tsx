@@ -8,12 +8,6 @@ export const generateStaticParams = async () => {
   return events.map((event) => ({ eventId: event.id, event }));
 };
 
-interface PageProps {
-  params: {
-    eventId: string;
-  };
-}
-
 export const generateMetadata = async ({ params }: PageProps) => {
   const event = await getEventById(params.eventId);
   if (!event) return { title: "Something went wrong..." };
@@ -21,6 +15,12 @@ export const generateMetadata = async ({ params }: PageProps) => {
     title: event.title,
   };
 };
+
+interface PageProps {
+  params: {
+    eventId: string;
+  };
+}
 
 const EventDetailsPage = async ({ params }: PageProps) => {
   const event = await getEventById(params.eventId);

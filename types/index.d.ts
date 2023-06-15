@@ -10,6 +10,7 @@ interface UpcomingEvent {
 
 interface EventComment {
   id: string;
+  timeStamp: number;
   email: string;
   name: string;
   text: string;
